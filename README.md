@@ -35,3 +35,9 @@ Feel free to add or change this project as you like.
 -   Update gitignore to ignore some common node folders
 -   Removed Jest in favor of the default node test runner and added glob to be able to run all tests in the `src` folder (Node 21 adds support for glob patterns in test files) this greatly reduces the complexity of the project and makes it easier to maintain
 -   To add coverage, I added `nyc` and added a script to run it in `test` and `test:only` scripts, this file will not need to be changed in the future and it's easier to maintain
+
+### Code changes
+
+- Use `zod` to validate the body of the request
+- Remove `dotenv` as we are using `env-file` now
+- Changes are also in comments in the code
