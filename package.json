@@ -6,8 +6,10 @@
     "type": "module",
     "scripts": {
         "start": "node --env-file=.env dist/index.js",
-        "start:dev": "NODE_OPTIONS='--import tsx' node --env-file=.env src/index.ts",
-        "prestart": "npm run build",
+        "prestart": "npm run build && npm run infra:up",
+        "infra:up": "docker-compose up -d",
+        "prestart:dev": "npm run infra:up",
+        "start:dev": "DEBUG=perspective:* NODE_OPTIONS='--import tsx' node --env-file=.env src/index.ts",
         "build": "tsc",
         "test:only": "glob -c \"node --import tsx --test\" \"./src/**/*.test.ts\"",
         "test": "nyc npm run test:only"
