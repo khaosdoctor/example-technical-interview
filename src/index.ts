@@ -25,7 +25,7 @@ async function Initialize(config: AppConfig) {
     };
 }
 
-async function main(application: ApplicationInterface, config: AppConfig = appConfig) {
+async function main(application: ApplicationInterface, config: AppConfig) {
     const logger = config.logger.extend('perspective:main');
     logger('Starting application with config %O', config);
     const timeout = (fn: Function, ms: number = 3000) => {
@@ -54,4 +54,5 @@ async function main(application: ApplicationInterface, config: AppConfig = appCo
     return start();
 }
 
-await main(RESTInterface);
+const config = appConfig();
+await main(RESTInterface, config);
