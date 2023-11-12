@@ -1,5 +1,6 @@
-import { NextFunction, Request, RequestHandler, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import { z } from 'zod';
+import { AppConfig } from '../config.js';
 import {
     UserCreationSchema,
     UserRepository,
@@ -7,7 +8,6 @@ import {
     UserUpdateSchema,
 } from '../data/UserRepository.js';
 import { UserService } from '../service/UserService.js';
-import { AppConfig } from '../config.js';
 
 const listQuerySchema = z.object({
     created: z.any().optional(),
