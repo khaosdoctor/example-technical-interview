@@ -13,7 +13,7 @@
         "allowSyntheticDefaultImports": true,
         "strict": true,
         "noImplicitAny": true,
-        "target": "ES6"
+        "target": "ES2022"
     },
     "exclude": ["src/**/*.test.ts"]
 }
