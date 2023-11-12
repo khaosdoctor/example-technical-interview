@@ -14,5 +14,6 @@
         "strict": true,
         "noImplicitAny": true,
         "target": "ES6"
-    }
+    },
+    "exclude": ["src/**/*.test.ts"]
 }
