@@ -1,7 +1,8 @@
-import { describe, expect, test } from '@jest/globals';
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
 
 describe('your code', () => {
-    test('it passes the tests', () => {
-        expect(true).toEqual(true);
+    it('should pass the test', () => {
+        assert.ok(true);
     });
 });
