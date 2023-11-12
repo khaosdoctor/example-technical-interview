@@ -5,12 +5,15 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "node --env-file=.env dist/index.js",
         "prestart": "npm run build && npm run infra:up",
-        "infra:up": "docker-compose up -d",
+        "start": "node --env-file=.env dist/index.js",
+        "poststart": "npm run infra:down",
         "prestart:dev": "npm run infra:up",
         "start:dev": "DEBUG=perspective:* NODE_OPTIONS='--import tsx' node --env-file=.env src/index.ts",
+        "poststart:dev": "npm run infra:down",
         "build": "tsc",
+        "infra:down": "docker-compose down",
+        "infra:up": "docker-compose up -d",
         "test": "c8 glob -c \"node --import tsx --test\" \"./src/**/*.test.ts\""
     },
     "author": "Christoph Fey",

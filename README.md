@@ -9,6 +9,10 @@ This project skeleton contains a basic Express setup one endpoint to create a us
 -   `npm run build` - Builds the project
 -   `npm run test` - Runs the tests with coverage by default
 
+## Setup
+
+The project only requires you to have Docker installed on the machine. There's a `docker-compose.yml` file that will start a MongoDB database. You don't need to run the scripts manually, the `docker-compose.yml` file will be used by the `npm run start:dev` script before running the server.
+
 ## Goal
 
 1. Adjust POST /users that it accepts a user and stores it in a database.
