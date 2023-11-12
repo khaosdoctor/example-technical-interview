@@ -2,6 +2,7 @@ import { z } from 'zod';
 import debug from 'debug';
 const baseLogger = debug('perspective');
 
+baseLogger.extend('config')('Loading configuration');
 export const AppConfigSchema = z.object({
     PORT: z
         .string()

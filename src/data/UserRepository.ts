@@ -1,6 +1,6 @@
-import { MongoClient, ObjectId, type Sort } from 'mongodb';
-import { AppConfig, appConfig } from '../config.js';
+import { MongoClient, type Sort } from 'mongodb';
 import { z } from 'zod';
+import { AppConfig, appConfig } from '../config.js';
 
 /**
  * I usually create a `domain` directory inside the src folder to add domain objects
@@ -35,32 +35,35 @@ export class UserRepository {
 
     async create(user: User) {
         this.#logger('Creating user %o', user);
-        await this.#collection.insertOne({ ...user, _id: new ObjectId(user.id) });
+        await this.#collection.insertOne(user);
         return user;
     }
 
     async update(user: User) {
         this.#logger('Updating user %s with %o', user.id, user);
         const { id, ...update } = user;
-        await this.#collection.updateOne({ _id: new ObjectId(id) }, { $set: update });
+        await this.#collection.updateOne({ id }, { $set: update });
         return user;
     }
 
     async delete(id: User['id']) {
         this.#logger('Deleting user %s', id);
-        const result = await this.#collection.deleteOne({ _id: new ObjectId(id) });
+        const result = await this.#collection.deleteOne({ id });
         return result.deletedCount === 1;
     }
 
     async findBy(property: keyof Omit<User, 'id'>, value: User[keyof Omit<User, 'id'>]) {
         this.#logger('Finding user by %s with value %s', property, value);
-        const user = await this.#collection.findOne<User>({ [property]: value });
+        const user = await this.#collection.findOne<User>(
+            { [property]: value },
+            { projection: { _id: 0 } },
+        );
         return user;
     }
 
     async findById(id: User['id']) {
         this.#logger('Finding user by id %s', id);
-        const user = await this.#collection.findOne<User>({ _id: new ObjectId(id) });
+        const user = await this.#collection.findOne<User>({ id }, { projection: { _id: 0 } });
         return user;
     }
 
@@ -68,7 +71,7 @@ export class UserRepository {
         this.#logger('Listing users');
         const options = sort ? { sort: { [sort]: 1 } satisfies Sort } : {};
         const users = await this.#collection
-            .find<User>({}, options)
+            .find<User>({}, { ...options, projection: { _id: 0 } })
             .skip((page - 1) * limit)
             .limit(limit)
             .toArray();

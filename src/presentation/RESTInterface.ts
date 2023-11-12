@@ -1,13 +1,12 @@
 import cors from 'cors';
-import { debug } from 'debug';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import type { Server } from 'http';
+import { ZodError } from 'zod';
 import { AppConfig } from '../config.js';
 import { HTTPError } from './errors/HTTPError.js';
 import { userRouter } from './routes.js';
-import { ZodError } from 'zod';
-const logger = debug('perspective:presentation:rest-interface');
+import { ServiceList } from '../index.js';
 
 function setSystemRoutes(app: Express) {
     app.use(helmet());
@@ -38,13 +37,14 @@ function errorMiddleware(err: HTTPError | ZodError, _: Request, res: Response, n
     next();
 }
 
-export async function RESTInterface(config: AppConfig, services: any) {
+export async function RESTInterface(config: AppConfig, services: ServiceList) {
+    const logger = config.logger.extend('perspective:presentation:rest-interface');
     const app: Express = express();
     let server: Server | undefined;
     setSystemRoutes(app);
 
     // Route definitions
-    app.use('/users', userRouter(services.user));
+    app.use('/users', userRouter(services.userService, config));
 
     // Final error handler
     app.use(errorMiddleware);
@@ -70,7 +70,9 @@ export async function RESTInterface(config: AppConfig, services: any) {
                 logger('REST Interface stopped');
                 process.exit(exitCode);
             });
+            return;
         }
+        process.exit(0);
     };
 
     return {
