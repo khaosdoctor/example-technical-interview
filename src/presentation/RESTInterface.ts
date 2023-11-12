@@ -78,5 +78,7 @@ export async function RESTInterface(config: AppConfig, services: ServiceList) {
     return {
         start,
         stop,
+        app,
+        server,
     };
 }

@@ -19,7 +19,7 @@ export const AppConfigSchema = z.object({
 export type AppConfig = z.infer<typeof AppConfigSchema> & { logger: typeof baseLogger };
 export function appConfig(origin = process.env): AppConfig {
     return {
-        ...AppConfigSchema.parse(process.env),
+        ...AppConfigSchema.parse(origin),
         logger: baseLogger,
     };
 }

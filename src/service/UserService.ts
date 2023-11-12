@@ -1,4 +1,4 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { User, UserCreationType, UserRepository, UserUpdateType } from '../data/UserRepository.js';
 import { HTTPError } from '../presentation/errors/HTTPError.js';
 

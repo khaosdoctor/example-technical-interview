@@ -32,26 +32,22 @@ export function userRouter(service: UserService, config: AppConfig) {
         errorBoundary(async (req, res) => {
             const user = UserCreationSchema.parse(req.body);
             const result = await service.createUser(user);
-            res.json(result).status(201);
+            res.status(201).json(result);
         }),
     );
 
     router.get(
         '/:id',
         errorBoundary(async (req, res) => {
-            // pick a valid UUID from the user schema and parse it
-            const { id } = UserSchema.pick({ id: true }).parse({ id: req.params.id });
-            const result = await service.findById(id);
-            res.json(result).status(200);
+            const result = await service.findById(req.params.id);
+            res.json(result);
         }),
     );
 
     router.delete(
         '/:id',
         errorBoundary(async (req, res) => {
-            // pick a valid UUID from the user schema and parse it
-            const { id } = UserSchema.pick({ id: true }).parse({ id: req.params.id });
-            await service.deleteUser(id);
+            await service.deleteUser(req.params.id);
             res.status(204).end();
         }),
     );
@@ -59,10 +55,8 @@ export function userRouter(service: UserService, config: AppConfig) {
     router.patch(
         '/:id',
         errorBoundary(async (req, res) => {
-            // pick a valid UUID from the user schema and parse it
-            const { id } = UserSchema.pick({ id: true }).parse({ id: req.params.id });
             const user = UserUpdateSchema.parse(req.body);
-            const result = await service.updateUser(id, user);
+            const result = await service.updateUser(req.params.id, user);
             res.json(result).status(200);
         }),
     );

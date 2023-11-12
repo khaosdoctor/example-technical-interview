@@ -5,7 +5,7 @@ import { createConnection } from './data/mongodb.js';
 import { RESTInterface } from './presentation/RESTInterface.js';
 import { UserService } from './service/UserService.js';
 
-export type ServiceList = Awaited<ReturnType<typeof Initialize>>;
+export type ServiceList = Awaited<ReturnType<typeof initializeDependencies>>;
 export type ApplicationInterface = (
     config: AppConfig,
     services: ServiceList,
@@ -16,7 +16,7 @@ export type ApplicationInterface = (
  * or TSyringe here to manage dependencies and create DI containers
  * but this would be overkill for this example
  */
-async function Initialize(config: AppConfig) {
+async function initializeDependencies(config: AppConfig) {
     const connection = await createConnection(config);
     const userRepository = new UserRepository(connection, config);
     const userService = new UserService(userRepository);
@@ -28,29 +28,27 @@ async function Initialize(config: AppConfig) {
 async function main(application: ApplicationInterface, config: AppConfig) {
     const logger = config.logger.extend('perspective:main');
     logger('Starting application with config %O', config);
-    const timeout = (fn: Function, ms: number = 3000) => {
-        return Promise.race([fn(), setTimeout(ms).then(() => Promise.resolve(process.exit(1)))]);
-    };
 
-    const services = await Initialize(config);
-    logger('Initialized services %O', services);
+    const services = await initializeDependencies(config);
     const { start, stop } = await application(config, services);
 
+    // Graceful shutdown
     process.on('SIGINT', async () => {
         logger('SIGINT signal received.');
-        await timeout(stop);
+        await stop();
     });
     process.on('SIGTERM', async () => {
         logger('SIGTERM signal received.');
-        await timeout(stop);
+        await stop();
     });
     process.on('unhandledRejection', async (reason) => {
         logger('Unhandled rejection', reason);
     });
     process.on('uncaughtException', async (error) => {
         logger('Uncaught exception', error);
-        await timeout(stop);
+        await stop();
     });
+
     return start();
 }
 

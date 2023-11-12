@@ -1,6 +1,6 @@
 import { MongoClient, type Sort } from 'mongodb';
 import { z } from 'zod';
-import { AppConfig, appConfig } from '../config.js';
+import { AppConfig } from '../config.js';
 
 /**
  * I usually create a `domain` directory inside the src folder to add domain objects
@@ -26,7 +26,7 @@ export class UserRepository {
 
     #logger;
     #collection;
-    constructor(connection: MongoClient, config: AppConfig = appConfig) {
+    constructor(connection: MongoClient, config: AppConfig) {
         this.#logger = config.logger.extend('data:UserRepository');
         const db = connection.db(UserRepository.databaseName);
         const collection = db.collection(UserRepository.collectionName);
@@ -51,16 +51,6 @@ export class UserRepository {
         const result = await this.#collection.deleteOne({ id });
         return result.deletedCount === 1;
     }
-
-    async findBy(property: keyof Omit<User, 'id'>, value: User[keyof Omit<User, 'id'>]) {
-        this.#logger('Finding user by %s with value %s', property, value);
-        const user = await this.#collection.findOne<User>(
-            { [property]: value },
-            { projection: { _id: 0 } },
-        );
-        return user;
-    }
-
     async findById(id: User['id']) {
         this.#logger('Finding user by id %s', id);
         const user = await this.#collection.findOne<User>({ id }, { projection: { _id: 0 } });

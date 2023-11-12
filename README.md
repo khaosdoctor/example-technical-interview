@@ -7,8 +7,7 @@ This project skeleton contains a basic Express setup one endpoint to create a us
 -   `npm run start` - Starts the server in "prod mode"
 -   `npm run start:dev` - Starts the server in "dev mode"
 -   `npm run build` - Builds the project
--   `npm run test` - Runs the tests without coverage by default
--   `npm run test:only` - Runs the tests without coverage by default
+-   `npm run test` - Runs the tests with coverage by default
 
 ## Goal
 
@@ -34,7 +33,7 @@ Feel free to add or change this project as you like.
 -   Updated all modules to latest versions
 -   Update gitignore to ignore some common node folders
 -   Removed Jest in favor of the default node test runner and added glob to be able to run all tests in the `src` folder (Node 21 adds support for glob patterns in test files) this greatly reduces the complexity of the project and makes it easier to maintain
--   To add coverage, I added `nyc` and added a script to run it in `test` and `test:only` scripts, this file will not need to be changed in the future and it's easier to maintain
+-   To add coverage, I added `c8` which is the default V8 code coverage tool and added a script to run it in the `test` script, this file will not need to be changed in the future and it's easier to maintain
 
 ### Code changes
 
