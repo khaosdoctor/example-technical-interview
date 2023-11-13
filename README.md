@@ -44,6 +44,7 @@ The project is intentionally a bit more complex than what I use to do in APIs li
 -   Update gitignore to ignore some common node folders
 -   Removed Jest in favor of the default node test runner and added glob to be able to run all tests in the `src` folder (Node 21 adds support for glob patterns in test files) this greatly reduces the complexity of the project and makes it easier to maintain
 -   To add coverage, I added `c8` which is the default V8 code coverage tool and added a script to run it in the `test` script, this file will not need to be changed in the future and it's easier to maintain
+    - Still in coverage, it's possible to use `--experimental-test-coverage` to achieve the same results, but it's highly experimental yet
 
 ### Code changes
 
