@@ -16,6 +16,9 @@
         "infra:up": "docker-compose up -d",
         "test": "c8 glob -c \"node --import tsx --test\" \"./src/**/*.test.ts\""
     },
+    "engines": {
+        "node": ">=20.6.0"
+    },
     "author": "Christoph Fey",
     "license": "ISC",
     "dependencies": {
