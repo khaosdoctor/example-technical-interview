@@ -24,6 +24,10 @@ Feel free to add or change this project as you like.
 
 ## Changelog
 
+### Remarks
+
+The project is intentionally a bit more complex than what I use to do in APIs like this to highlight some of the things that I like to work with, like the native runner and using less dependencies, with focus on long-term maintenance so it's a bit easier to add new interfaces like CLIs or anything else, as well as moving the database around without changing the main logic.
+
 ### Configuration changes
 
 -   Updated from Node 18 to Node 20 to be able to use `env-file` and remove `dotenv` dependency (I use `asdf` so I manually updated `nvmrc` to `v20` and added `.tool-versions` file)
@@ -44,3 +48,4 @@ Feel free to add or change this project as you like.
 - Use `zod` to validate the body of the request
 - Remove `dotenv` as we are using `env-file` now
 - Changes are also in comments in the code
+- Added complete CRUD for users
