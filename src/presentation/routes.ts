@@ -31,6 +31,11 @@ export function userRouter(service: UserService, config: AppConfig) {
         '/',
         errorBoundary(async (req, res) => {
             const user = UserCreationSchema.parse(req.body);
+            // Conflict checking was intentionally omitted to be easier to test
+            // however it should be added in a real application like
+            // existingUser = await service.findByEmail(user.email);
+            // with the corresponding methods in the service and repository
+            // Returning 409 Conflict if the user already exists
             const result = await service.createUser(user);
             res.status(201).json(result);
         }),
