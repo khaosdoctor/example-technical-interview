@@ -194,7 +194,7 @@ describe('RESTInterface', async () => {
     });
 
     describe('GET /users', () => {
-        it('should return 200 and the list of users', async () => {
+        it('should return 200 and the list of users with no sorting', async () => {
             const users = [
                 {
                     id: randomUUID(),
@@ -216,6 +216,33 @@ describe('RESTInterface', async () => {
 
             const response = await wrappedApp.get(`/users`).expect(200);
 
+            assert.deepEqual(userServiceMock.listUsers.mock.calls[0].arguments[2], undefined);
+            assert.deepStrictEqual(inspect(response.body), inspect(listReturn));
+            userServiceMock.listUsers.mock.resetCalls();
+        });
+
+        it('should return 200 and the list of users with sorting', async () => {
+            const users = [
+                {
+                    id: randomUUID(),
+                    name: 'John Doe',
+                    createdAt: new Date().toISOString(),
+                    email: 'some@email',
+                },
+            ];
+
+            const listReturn = {
+                from: 1,
+                to: 1,
+                total: 1,
+                page: 1,
+                results: users,
+            };
+
+            userServiceMock.listUsers.mock.mockImplementationOnce(async () => listReturn);
+
+            const response = await wrappedApp.get(`/users?created=true`).expect(200);
+            assert.deepEqual(userServiceMock.listUsers.mock.calls[0].arguments[2], 'createdAt');
             assert.deepStrictEqual(inspect(response.body), inspect(listReturn));
         });
     });
