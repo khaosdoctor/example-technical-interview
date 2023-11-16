@@ -79,7 +79,13 @@ export function userRouter(service: UserService, config: AppConfig) {
                 res,
             ) => {
                 const query = listQuerySchema.parse(req.query);
-                const results = await service.listUsers(query.page, query.limit);
+                const results = await service.listUsers(
+                    query.page,
+                    query.limit,
+                    // You can extend this same interface to support all other sorts
+                    // As the service backend is already prepared to handle it
+                    req.query.created ? 'createdAt' : undefined,
+                );
                 res.set('X-Range', `${results.from}-${results.to}/${results.total}`);
                 res.set('X-Current-Page', String(results.page));
                 res.json(results).status(200);
